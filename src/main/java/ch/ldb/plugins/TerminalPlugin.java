@@ -28,9 +28,19 @@ public class TerminalPlugin implements Plugin<String> {
         executor.submit(() -> {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Type something in the terminal (it will be saved to output.txt):");
-            while (true) {
-                String input = scanner.nextLine();
-                output.emit(input); // Emit the terminal input
+            try {
+                while (true) {
+                    System.out.print("> ");
+                    String input = scanner.nextLine();
+                    if (input.isEmpty()) {
+                        System.out.println("Scanner finished.");
+                        break; // Exit the loop if "Enter" is pressed without input
+                    }
+                    output.emit(input); // Emit the input to the observable
+                }
+            } finally {
+                scanner.close(); // Close the scanner
+                executor.shutdown(); // Shutdown the executor service
             }
         });
     }
