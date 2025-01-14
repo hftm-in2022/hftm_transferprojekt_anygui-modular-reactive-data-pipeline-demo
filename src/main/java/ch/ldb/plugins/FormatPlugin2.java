@@ -1,4 +1,6 @@
-package ch.ldb;
+package ch.ldb.plugins;
+
+import ch.ldb.core.Observable;
 
 public class FormatPlugin2 implements Plugin<String> {
     private final Observable<String> output = new Observable<>();

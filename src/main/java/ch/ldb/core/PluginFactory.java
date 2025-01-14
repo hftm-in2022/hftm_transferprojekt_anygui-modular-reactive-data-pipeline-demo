@@ -1,6 +1,12 @@
-package ch.ldb;
+package ch.ldb.core;
 
 import java.nio.file.Path;
+
+import ch.ldb.plugins.FilePlugin1;
+import ch.ldb.plugins.FilePlugin2;
+import ch.ldb.plugins.FormatPlugin1;
+import ch.ldb.plugins.FormatPlugin2;
+import ch.ldb.plugins.Plugin;
 
 public class PluginFactory {
     private final ConfigLoader configLoader;

@@ -1,8 +1,10 @@
-package ch.ldb;
+package ch.ldb.plugins;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import ch.ldb.core.Observable;
 
 public class TerminalPlugin implements Plugin<String> {
     private final Observable<String> output = new Observable<>();

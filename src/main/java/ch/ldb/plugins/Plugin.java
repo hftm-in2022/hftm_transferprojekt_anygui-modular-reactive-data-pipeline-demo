@@ -1,4 +1,6 @@
-package ch.ldb;
+package ch.ldb.plugins;
+
+import ch.ldb.core.Observable;
 
 public interface Plugin<T> {
     // Exposes the plugin's output as an observable

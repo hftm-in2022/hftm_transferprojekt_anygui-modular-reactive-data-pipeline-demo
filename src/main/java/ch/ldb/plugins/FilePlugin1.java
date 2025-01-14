@@ -1,4 +1,4 @@
-package ch.ldb.observable_demo;
+package ch.ldb.plugins;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,16 +14,30 @@ import java.nio.file.WatchService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FilePlugin {
-    private final Observable<String> fileDataStream = new Observable<>();
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+import ch.ldb.core.Observable;
 
-    // Returns the observable stream for file data
-    public Observable<String> getFileDataStream() {
-        return fileDataStream;
+public class FilePlugin1 implements Plugin<String> {
+    private final Observable<String> output = new Observable<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private String outputFilePath; // Path to the output file
+
+    @Override
+    public Observable<String> getOutput() {
+        return output;
     }
 
-    // Watches the file for changes and emits its content
+    @Override
+    public void setInput(Observable<String> input) {
+        // Subscribe to the input observable and overwrite the output file with the new data
+        input.subscribe(data -> {
+            if (outputFilePath != null) {
+                overwriteFile(outputFilePath, data); // Overwrite the output file
+            } else {
+                System.err.println("Output file path is not set!");
+            }
+        });
+    }
+
     public void watchFile(String filePath) {
         executor.submit(() -> {
             try {
@@ -41,7 +55,7 @@ public class FilePlugin {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         if (event.context().toString().equals(Paths.get(filePath).getFileName().toString())) {
                             String content = Files.readString(Paths.get(filePath));
-                            fileDataStream.emit(content); // Emit file content
+                            output.emit(content); // Emit the entire file content
                         }
                     }
                     key.reset();
@@ -52,9 +66,12 @@ public class FilePlugin {
         });
     }
 
-    // Writes content to the specified file
-    public void writeFile(String filePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+    public void setOutputFilePath(String filePath) {
+        this.outputFilePath = filePath; // Set the output file path
+    }
+
+    private void overwriteFile(String filePath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) { // Overwrite mode
             writer.write(content);
         } catch (IOException e) {
             e.printStackTrace();
