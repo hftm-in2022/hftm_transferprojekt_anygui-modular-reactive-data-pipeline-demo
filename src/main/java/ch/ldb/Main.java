@@ -11,6 +11,14 @@ public class Main {
         // Load configuration
         String configFilePath = "src\\main\\java\\ch\\ldb\\.config.txt";
         ConfigLoader configLoader = new ConfigLoader(configFilePath);
+        String inputFilePath = configLoader.get("outputPath");
+
+        if (inputFilePath == null || inputFilePath.isEmpty()) {
+            System.err.println("Error: 'outputPath' not found or is empty in the configuration file.");
+            return;
+        }
+
+        // Initialize the FileInputPlugin
         FileInputPlugin fileInputPlugin = new FileInputPlugin();
 
         // Create the plugin factory
@@ -29,11 +37,13 @@ public class Main {
         // Start reading from the terminal
         terminalPlugin.startReadingFromTerminal();
 
-        // read the input file
+        // Read the input file
         fileInputPlugin.getOutput().subscribe(data -> {
             System.out.println("Received: " + data);
         });
 
-        fileInputPlugin.readFromFile("src\\main\\java\\ch\\ldb\\.input.txt");
+        // Use the file path from configuration
+        System.out.println("Reading input file from: " + inputFilePath);
+        fileInputPlugin.readFromFile(inputFilePath);
     }
 }
