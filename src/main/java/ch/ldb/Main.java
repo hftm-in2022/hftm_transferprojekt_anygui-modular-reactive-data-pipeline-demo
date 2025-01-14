@@ -14,7 +14,7 @@ public class Main {
         String inputFilePath = configLoader.get("inputPath");
 
         if (inputFilePath == null || inputFilePath.isEmpty()) {
-            System.err.println("Error: 'outputPath' not found or is empty in the configuration file.");
+            System.err.println("Error: 'inputPath' not found or is empty in the configuration file.");
             return;
         }
 
@@ -37,13 +37,7 @@ public class Main {
         // Start reading from the terminal
         terminalPlugin.startReadingFromTerminal();
 
-        // Read the input file
-        fileInputPlugin.getOutput().subscribe(data -> {
-            System.out.println("Received: " + data);
-        });
-
         // Use the file path from configuration
-        System.out.println("Reading input file from: " + inputFilePath);
         fileInputPlugin.readFromFile(inputFilePath);
     }
 }
