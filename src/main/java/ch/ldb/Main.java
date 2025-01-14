@@ -1,5 +1,10 @@
 package ch.ldb;
 
+import ch.ldb.core.ConfigLoader;
+import ch.ldb.core.PluginFactory;
+import ch.ldb.plugins.Plugin;
+import ch.ldb.plugins.TerminalPlugin;
+
 public class Main {
     public static void main(String[] args) {
         // Load configuration

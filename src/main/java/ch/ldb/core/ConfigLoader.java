@@ -1,4 +1,4 @@
-package ch.ldb;
+package ch.ldb.core;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
