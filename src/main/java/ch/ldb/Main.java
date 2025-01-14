@@ -11,7 +11,7 @@ public class Main {
         // Load configuration
         String configFilePath = "src\\main\\java\\ch\\ldb\\.config.txt";
         ConfigLoader configLoader = new ConfigLoader(configFilePath);
-        String inputFilePath = configLoader.get("outputPath");
+        String inputFilePath = configLoader.get("inputPath");
 
         if (inputFilePath == null || inputFilePath.isEmpty()) {
             System.err.println("Error: 'outputPath' not found or is empty in the configuration file.");
