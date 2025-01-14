@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\Main.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 public class Main {
     public static void main(String[] args) {

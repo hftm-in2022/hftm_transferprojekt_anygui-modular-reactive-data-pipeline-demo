@@ -1,6 +1,5 @@
+// src\main\java\ch\ldb\PluginFactory.java
 package ch.ldb;
-
-import java.nio.file.Path;
 
 public class PluginFactory {
     private final ConfigLoader configLoader;
@@ -11,32 +10,23 @@ public class PluginFactory {
 
     public Plugin<String> createInterfacePlugin() {
         String interfaceType = configLoader.getInterface();
-        Path inputPath = configLoader.getPath("inputPath"); // Get resolved input path
-        Path outputPath = configLoader.getPath("outputPath"); // Get resolved output path
-
         if ("1".equals(interfaceType)) {
-            FilePlugin1 filePlugin = new FilePlugin1();
-            filePlugin.watchFile(inputPath.toString()); // Use resolved input path
-            filePlugin.setOutputFilePath(outputPath.toString()); // Use resolved output path
-            return filePlugin;
+            return new IOPlugin1(); // Injected dependency
         } else if ("2".equals(interfaceType)) {
-            FilePlugin2 filePlugin2 = new FilePlugin2();
-            filePlugin2.watchFile(inputPath.toString()); // Use resolved input path
-            filePlugin2.setOutputFilePath(outputPath.toString());
-            return filePlugin2; // FilePlugin2 doesn't need an output path in this example
+            return new IOPlugin2(); // Injected dependency
         } else {
-            throw new IllegalArgumentException("Unknown interface: " + interfaceType);
+            throw new IllegalArgumentException("Unknown interface type: " + interfaceType);
         }
     }
 
     public Plugin<String> createFormatPlugin() {
         String formatType = configLoader.getFormat();
         if ("1".equals(formatType)) {
-            return new FormatPlugin1();
+            return new FormatPlugin1(); // Injected dependency
         } else if ("2".equals(formatType)) {
-            return new FormatPlugin2();
+            return new FormatPlugin2(); // Injected dependency
         } else {
-            throw new IllegalArgumentException("Unknown format: " + formatType);
+            throw new IllegalArgumentException("Unknown format type: " + formatType);
         }
     }
 }

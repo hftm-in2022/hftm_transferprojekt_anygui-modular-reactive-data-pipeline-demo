@@ -1,15 +1,18 @@
 // src\main\java\ch\ldb\ConfigLoader.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigLoader {
     private final Map<String, String> config = new HashMap<>();
 
+    // Load the configuration from a file
     public ConfigLoader(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -24,14 +27,26 @@ public class ConfigLoader {
         }
     }
 
+    // Get a configuration value as a string
     public String get(String key) {
         return config.get(key);
     }
 
+    // Get a configuration value as a resolved path
+    public Path getPath(String key) {
+        String pathStr = config.get(key);
+        if (pathStr == null) {
+            throw new IllegalArgumentException("Key not found in config: " + key);
+        }
+        return Paths.get(pathStr).toAbsolutePath().normalize();
+    }
+
+    // Get the interface type
     public String getInterface() {
         return get("interface");
     }
 
+    // Get the format type
     public String getFormat() {
         return get("format");
     }

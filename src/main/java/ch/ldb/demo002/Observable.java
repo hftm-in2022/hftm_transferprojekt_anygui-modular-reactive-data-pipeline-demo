@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\Observable.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 import java.util.function.Consumer;
 

@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\TerminalPlugin.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -11,23 +11,25 @@ public class TerminalPlugin implements Plugin<String> {
 
     @Override
     public Observable<String> getOutput() {
-        return output;
+        return output; // Emits data entered in the terminal
     }
 
     @Override
     public void setInput(Observable<String> input) {
+        // Subscribe to the input observable and print the data to the terminal
         input.subscribe(data -> {
             System.out.println("Terminal Output: " + data);
         });
     }
 
+    // Start reading input from the terminal and emit it to the output observable
     public void startReadingFromTerminal() {
         executor.submit(() -> {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Type something in the terminal:");
+            System.out.println("Type something in the terminal (it will be saved to output.txt):");
             while (true) {
                 String input = scanner.nextLine();
-                output.emit(input); // Emit terminal input
+                output.emit(input); // Emit the terminal input
             }
         });
     }

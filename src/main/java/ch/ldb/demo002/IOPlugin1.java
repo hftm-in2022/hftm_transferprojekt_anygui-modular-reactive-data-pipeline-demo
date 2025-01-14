@@ -1,5 +1,5 @@
-// src\main\java\ch\ldb\IOPlugin2.java
-package ch.ldb;
+// src\main\java\ch\ldb\IOPlugin1.java
+package ch.ldb.demo002;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,14 +12,12 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class IOPlugin2 implements Plugin<String> {
+public class IOPlugin1 implements Plugin<String> {
     private final Observable<String> output = new Observable<>();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private long lastLineCount = 0; // Tracks the number of lines in the input file
     private String outputFilePath; // Path to the output file
 
     @Override
@@ -29,10 +27,10 @@ public class IOPlugin2 implements Plugin<String> {
 
     @Override
     public void setInput(Observable<String> input) {
-        // Subscribe to the input observable and append the data to the output file
+        // Subscribe to the input observable and overwrite the output file with the new data
         input.subscribe(data -> {
             if (outputFilePath != null) {
-                appendToFile(outputFilePath, data); // Append to the configured output file
+                overwriteFile(outputFilePath, data); // Overwrite the output file
             } else {
                 System.err.println("Output file path is not set!");
             }
@@ -55,13 +53,8 @@ public class IOPlugin2 implements Plugin<String> {
                     WatchKey key = watchService.take();
                     for (WatchEvent<?> event : key.pollEvents()) {
                         if (event.context().toString().equals(Paths.get(filePath).getFileName().toString())) {
-                            List<String> lines = Files.readAllLines(Paths.get(filePath));
-                            if (lines.size() > lastLineCount) {
-                                // Get the newest line
-                                String newLine = lines.get(lines.size() - 1);
-                                lastLineCount = lines.size(); // Update the line count
-                                output.emit(newLine); // Emit the newest line
-                            }
+                            String content = Files.readString(Paths.get(filePath));
+                            output.emit(content); // Emit the entire file content
                         }
                     }
                     key.reset();
@@ -76,10 +69,9 @@ public class IOPlugin2 implements Plugin<String> {
         this.outputFilePath = filePath; // Set the output file path
     }
 
-    private void appendToFile(String filePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) { // Append mode
+    private void overwriteFile(String filePath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) { // Overwrite mode
             writer.write(content);
-            writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }

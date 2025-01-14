@@ -1,7 +1,8 @@
-// src\main\java\ch\ldb\FormatPlugin1.java
-package ch.ldb;
+// src\main\java\ch\ldb\FormatPlugin2.java
+package ch.ldb.demo002;
 
-public class FormatPlugin1 implements Plugin<String> {
+
+public class FormatPlugin2 implements Plugin<String> {
     private final Observable<String> output = new Observable<>();
 
     @Override
@@ -12,7 +13,7 @@ public class FormatPlugin1 implements Plugin<String> {
     @Override
     public void setInput(Observable<String> input) {
         input.subscribe(data -> {
-            String transformed = "Format Plugin 1: " + data;
+            String transformed = "Format Plugin 2: " + data;
             output.emit(transformed); // Emit transformed data
         });
     }

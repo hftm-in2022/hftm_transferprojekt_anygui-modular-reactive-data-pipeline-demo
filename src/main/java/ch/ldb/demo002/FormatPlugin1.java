@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\FormatPlugin1.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 public class FormatPlugin1 implements Plugin<String> {
     private final Observable<String> output = new Observable<>();

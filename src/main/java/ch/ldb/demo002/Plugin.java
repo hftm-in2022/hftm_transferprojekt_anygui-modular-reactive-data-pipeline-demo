@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\Plugin.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 public interface Plugin<T> {
     // Exposes the plugin's output as an observable

@@ -1,5 +1,5 @@
 // src\main\java\ch\ldb\IOPlugin2.java
-package ch.ldb;
+package ch.ldb.demo002;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
