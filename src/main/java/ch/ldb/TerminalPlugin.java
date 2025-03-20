@@ -6,18 +6,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TerminalPlugin implements Plugin<String> {
-    private final Observable<String> output = new Observable<>();
+    private final Observable<String> observableA = new Observable<>(); // Forward flow
+    private final Observable<String> observableB = new Observable<>(); // Reverse flow
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
-    public Observable<String> getOutput() {
-        return output;
+    public Observable<String> getObservableA() {
+        return observableA;
     }
 
     @Override
-    public void setInput(Observable<String> input) {
+    public Observable<String> getObservableB() {
+        return observableB;
+    }
+
+    @Override
+    public void setInputA(Observable<String> input) {
         input.subscribe(data -> {
-            System.out.println("Terminal Output: " + data);
+            System.out.println("Terminal Output (Forward): " + data);
+        });
+    }
+
+    @Override
+    public void setInputB(Observable<String> input) {
+        input.subscribe(data -> {
+            System.out.println("Terminal Output (Reverse): " + data);
         });
     }
 
@@ -27,7 +40,8 @@ public class TerminalPlugin implements Plugin<String> {
             System.out.println("Type something in the terminal:");
             while (true) {
                 String input = scanner.nextLine();
-                output.emit(input); // Emit terminal input
+                observableA.emit(input); // Emit terminal input (forward flow)
+                observableB.emit(input); // Emit terminal input (reverse flow)
             }
         });
     }

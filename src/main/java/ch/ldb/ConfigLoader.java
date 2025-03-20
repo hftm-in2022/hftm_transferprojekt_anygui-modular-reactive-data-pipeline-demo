@@ -29,10 +29,23 @@ public class ConfigLoader {
     }
 
     public String getInterface() {
-        return get("interface");
+        return get("ioPlugin");
     }
 
     public String getFormat() {
-        return get("format");
+        return get("formatPlugin");
+    }
+
+    public String getOutputPath() {
+        return get("outputPath");
+    }
+
+    public String getInputPath() {
+        return get("inputPath");
+    }
+
+    public void printConfig() {
+        System.out.println("Loaded configuration:");
+        config.forEach((key, value) -> System.out.println(key + " = " + value));
     }
 }

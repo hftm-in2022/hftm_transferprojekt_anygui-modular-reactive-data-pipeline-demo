@@ -11,14 +11,18 @@ public class Main {
         PluginFactory pluginFactory = new PluginFactory(configLoader);
 
         // Dynamically create plugins
-        Plugin<String> interfacePlugin = pluginFactory.createInterfacePlugin();
-        Plugin<String> formatPlugin = pluginFactory.createFormatPlugin();
-        TerminalPlugin terminalPlugin = new TerminalPlugin();
+        Plugin<String> ioPlugin = pluginFactory.createInterfacePlugin(); // IOPlugin
+        Plugin<String> formatPlugin = pluginFactory.createFormatPlugin(); // FormatPlugin
+        TerminalPlugin terminalPlugin = new TerminalPlugin(); // TerminalPlugin
 
         // Wire the plugins together
-        formatPlugin.setInput(interfacePlugin.getOutput()); // InterfacePlugin -> FormatPlugin
-        terminalPlugin.setInput(formatPlugin.getOutput()); // FormatPlugin -> TerminalPlugin
-        interfacePlugin.setInput(terminalPlugin.getOutput()); // TerminalPlugin -> InterfacePlugin
+        // Pipeline A: IO -> Format -> Terminal
+        formatPlugin.setInputA(ioPlugin.getObservableA()); // IOPlugin -> FormatPlugin
+        terminalPlugin.setInputA(formatPlugin.getObservableA()); // FormatPlugin -> TerminalPlugin
+
+        // Pipeline B: Terminal -> Format -> IO
+        formatPlugin.setInputB(terminalPlugin.getObservableB()); // TerminalPlugin -> FormatPlugin
+        ioPlugin.setInputB(formatPlugin.getObservableB()); // FormatPlugin -> IOPlugin
 
         // Start reading from the terminal
         terminalPlugin.startReadingFromTerminal();

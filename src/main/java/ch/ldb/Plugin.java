@@ -1,10 +1,13 @@
 // src\main\java\ch\ldb\Plugin.java
+
 package ch.ldb;
 
 public interface Plugin<T> {
-    // Exposes the plugin's output as an observable
-    Observable<T> getOutput();
+    // Observables for forward and reverse flows
+    Observable<T> getObservableA(); // Forward flow
+    Observable<T> getObservableB(); // Reverse flow
 
-    // Accepts input from another plugin
-    void setInput(Observable<T> input);
+    // Methods to set input for forward and reverse flows
+    void setInputA(Observable<T> input); // Set input for forward flow
+    void setInputB(Observable<T> input); // Set input for reverse flow
 }
